@@ -1,0 +1,94 @@
+﻿@*@model IEnumerable<PrograAvanzadaP.Models.ApplicationUser> *@
+@using System.Security.Claims;
+@{
+    ViewBag.Title = "Home Page";
+}
+
+
+@if (User.Identity.IsAuthenticated)
+{
+
+    @* saca el usuario actual junto con sus identidades *@
+    var claimsIdentity = User.Identity as System.Security.Claims.ClaimsIdentity;
+    @* Se saca el rol y si no lo tiene se asigna uno *@
+    var roleOfUser = claimsIdentity != null ? claimsIdentity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value : "Estudiante";
+
+
+    if (roleOfUser == "Admin")
+    {
+
+        <h3>Usuario administrador</h3>
+        <hr />
+    }
+    else if (roleOfUser == "Profesor")
+    {
+        <h3>Usuario profesor</h3>
+        <hr />
+
+
+        <div class="container">
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <div class="card mb-4" style="width: 18rem;">
+                        <img src="..." class="card-img-top" alt="Imagen de mis recetas">
+                        <div class="card-body">
+                            <h5 class="card-title">Recetas</h5>
+                            <p class="card-text">Explora todas las recetas creadas.</p>
+                            @Html.ActionLink("Ir a mis recetas", "Index", "Recetas", new { area = "" }, new { @class = "btn btn-primary" })
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    }
+    else if (roleOfUser == "Estudiante")
+    {
+
+        <h3>Usuario estudiante</h3>
+        <hr />
+
+        <div class="container">
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <div class="card mb-4" style="width: 18rem;">
+                        <img src="..." class="card-img-top" alt="Imagen de mis recetas">
+                        <div class="card-body">
+                            <h5 class="card-title">Mis Recetas</h5>
+                            <p class="card-text">Explora un mundo de sabores y crea tus propias recetas.</p>
+                            @Html.ActionLink("Ir a mis recetas", "Index", "Recetas", new { area = "" }, new { @class = "btn btn-primary" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="card mb-4" style="width: 18rem;">
+                        <img src="..." class="card-img-top" alt="Imagen mis cursos">
+                        <div class="card-body">
+                            <h5 class="card-title">Cursos</h5>
+                            <p class="card-text">De principiante a maestro culinario: Aprende el camino del sabor.</p>
+                            <a href="#" class="btn btn-primary">Ir a algún lugar</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    }
+    else
+    {
+        <h3>Usuario sin rol</h3>
+        <hr />
+    }
+}
+else
+{
+    <h1> Bienvenido a mi pagina </h1>
+}
+
+

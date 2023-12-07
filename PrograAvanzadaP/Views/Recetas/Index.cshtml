@@ -1,0 +1,105 @@
+﻿@model IEnumerable<PrograAvanzadaP.Models.Receta>
+@using System.Security.Claims;
+@{
+    ViewBag.Title = "Mis Recetas";
+}
+
+<h2>Mis Recetas</h2>
+
+@if (Model.Count() == 0)
+{
+    <h2>Crea tus propias recetas</h2>
+    @Html.ActionLink("Crear Receta", "Create", new { @class = "btn btn-primary" })
+
+}
+else
+{
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.NombreReceta)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Duracion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Porciones)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Ingredientes)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Instrucciones)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Estado)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IdUsuario)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaCreacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IdUsuarioModificacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.fechaModificacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Categoria.NombreCategoria)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombreReceta)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Duracion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Porciones)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ingredientes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Instrucciones)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Estado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdUsuario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaCreacion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdUsuarioModificacion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.fechaModificacion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Categoria.NombreCategoria)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.IdReceta }) |
+                @Html.ActionLink("Details", "Details", new { id = item.IdReceta }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.IdReceta })
+            </td>
+        </tr>
+    }
+
+</table>
+
+}

@@ -1,0 +1,292 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="PrograAvanzadaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <ComplexType Name="CursosEstudiante_Result">
+    <Property Name="IdCurso" Type="Int32" Nullable="false" />
+    <Property Name="NombreCurso" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ProfesorAsignado" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Hora" Type="String" MaxLength="155" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Dia" Type="String" MaxLength="155" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FechaInicio" Type="DateTime" Nullable="false" />
+    <Property Name="FechaFin" Type="DateTime" Nullable="false" />
+  </ComplexType>
+  <EntityType Name="Categoria">
+    <Key>
+      <PropertyRef Name="IdCategoria" />
+    </Key>
+    <Property Name="IdCategoria" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NombreCategoria" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Recetas" Relationship="Self.FK_categoria_receta" FromRole="Categorias" ToRole="Recetas" />
+  </EntityType>
+  <EntityType Name="Curso">
+    <Key>
+      <PropertyRef Name="IdCurso" />
+    </Key>
+    <Property Name="IdCurso" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NombreCurso" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IdUsuario" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="IdHorario" Type="Int32" Nullable="false" />
+    <Property Name="FechaInicio" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="FechaFin" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="Estado" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="ListaEstudiantes" Relationship="Self.FK_curso_listaEstudiantes" FromRole="Cursos" ToRole="ListaEstudiantes" />
+    <NavigationProperty Name="ListaRecetas" Relationship="Self.FK_curso_listaReceta" FromRole="Cursos" ToRole="ListaRecetas" />
+    <NavigationProperty Name="Horario" Relationship="Self.FK_horario" FromRole="Cursos" ToRole="Horarios" />
+  </EntityType>
+  <EntityType Name="Horario">
+    <Key>
+      <PropertyRef Name="IdHorario" />
+    </Key>
+    <Property Name="IdHorario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Hora" Type="String" MaxLength="155" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Dia" Type="String" MaxLength="155" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Cursos" Relationship="Self.FK_horario" FromRole="Horarios" ToRole="Cursos" />
+  </EntityType>
+  <EntityType Name="Imagenes_x_Recetas">
+    <Key>
+      <PropertyRef Name="IdImagen" />
+    </Key>
+    <Property Name="IdImagen" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IdReceta" Type="Int32" Nullable="false" />
+    <Property Name="DatoImagen" Type="Binary" MaxLength="2000" FixedLength="false" Nullable="false" />
+    <NavigationProperty Name="Receta" Relationship="Self.FK_receta_img" FromRole="Imagenes_x_Recetas" ToRole="Recetas" />
+  </EntityType>
+  <EntityType Name="ListaEstudiante">
+    <Key>
+      <PropertyRef Name="IdListaEstudiante" />
+    </Key>
+    <Property Name="IdListaEstudiante" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IdCurso" Type="Int32" Nullable="false" />
+    <Property Name="IdUsuario" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Curso" Relationship="Self.FK_curso_listaEstudiantes" FromRole="ListaEstudiantes" ToRole="Cursos" />
+  </EntityType>
+  <EntityType Name="ListaReceta">
+    <Key>
+      <PropertyRef Name="IdListaReceta" />
+    </Key>
+    <Property Name="IdListaReceta" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IdReceta" Type="Int32" Nullable="false" />
+    <Property Name="IdCurso" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Curso" Relationship="Self.FK_curso_listaReceta" FromRole="ListaRecetas" ToRole="Cursos" />
+    <NavigationProperty Name="Receta" Relationship="Self.FK_receta_listaReceta" FromRole="ListaRecetas" ToRole="Recetas" />
+  </EntityType>
+  <EntityType Name="ListaTag">
+    <Key>
+      <PropertyRef Name="IdListaTag" />
+    </Key>
+    <Property Name="IdListaTag" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IdTag" Type="Int32" Nullable="false" />
+    <Property Name="IdReceta" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Receta" Relationship="Self.FK_receta_tag" FromRole="ListaTags" ToRole="Recetas" />
+    <NavigationProperty Name="Tag" Relationship="Self.FK_tag" FromRole="ListaTags" ToRole="Tags" />
+  </EntityType>
+  <EntityType Name="Receta">
+    <Key>
+      <PropertyRef Name="IdReceta" />
+    </Key>
+    <Property Name="IdReceta" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NombreReceta" Type="String" MaxLength="35" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IdCategoria" Type="Int32" Nullable="false" />
+    <Property Name="Duracion" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Porciones" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Ingredientes" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Instrucciones" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Estado" Type="Boolean" Nullable="false" />
+    <Property Name="IdUsuario" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="FechaCreacion" Type="DateTime" Precision="0" />
+    <Property Name="IdUsuarioModificacion" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="fechaModificacion" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="Categoria" Relationship="Self.FK_categoria_receta" FromRole="Recetas" ToRole="Categorias" />
+    <NavigationProperty Name="Imagenes_x_Recetas" Relationship="Self.FK_receta_img" FromRole="Recetas" ToRole="Imagenes_x_Recetas" />
+    <NavigationProperty Name="ListaRecetas" Relationship="Self.FK_receta_listaReceta" FromRole="Recetas" ToRole="ListaRecetas" />
+    <NavigationProperty Name="ListaTags" Relationship="Self.FK_receta_tag" FromRole="Recetas" ToRole="ListaTags" />
+  </EntityType>
+  <EntityType Name="Tag">
+    <Key>
+      <PropertyRef Name="IdTag" />
+    </Key>
+    <Property Name="IdTag" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NombreTag" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="ListaTags" Relationship="Self.FK_tag" FromRole="Tags" ToRole="ListaTags" />
+  </EntityType>
+  <EntityType Name="VistaCursosActivo">
+    <Key>
+      <PropertyRef Name="IdCurso" />
+      <PropertyRef Name="NombreCurso" />
+      <PropertyRef Name="ProfesorAsignado" />
+      <PropertyRef Name="Hora" />
+      <PropertyRef Name="Dia" />
+      <PropertyRef Name="FechaInicio" />
+      <PropertyRef Name="FechaFin" />
+    </Key>
+    <Property Name="IdCurso" Type="Int32" Nullable="false" />
+    <Property Name="NombreCurso" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ProfesorAsignado" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Hora" Type="String" MaxLength="155" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Dia" Type="String" MaxLength="155" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FechaInicio" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="FechaFin" Type="DateTime" Nullable="false" Precision="0" />
+  </EntityType>
+  <EntityType Name="VistaCursosEstudianteConIdUsuario">
+    <Key>
+      <PropertyRef Name="IdCurso" />
+      <PropertyRef Name="NombreCurso" />
+      <PropertyRef Name="ProfesorAsignado" />
+      <PropertyRef Name="Hora" />
+      <PropertyRef Name="Dia" />
+      <PropertyRef Name="FechaInicio" />
+      <PropertyRef Name="FechaFin" />
+    </Key>
+    <Property Name="IdUsuario" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="IdCurso" Type="Int32" Nullable="false" />
+    <Property Name="NombreCurso" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ProfesorAsignado" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Hora" Type="String" MaxLength="155" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Dia" Type="String" MaxLength="155" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FechaInicio" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="FechaFin" Type="DateTime" Nullable="false" Precision="0" />
+  </EntityType>
+  <Association Name="FK_categoria_receta">
+    <End Role="Categorias" Type="Self.Categoria" Multiplicity="1" />
+    <End Role="Recetas" Type="Self.Receta" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categorias">
+        <PropertyRef Name="IdCategoria" />
+      </Principal>
+      <Dependent Role="Recetas">
+        <PropertyRef Name="IdCategoria" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_curso_listaEstudiantes">
+    <End Role="Cursos" Type="Self.Curso" Multiplicity="1" />
+    <End Role="ListaEstudiantes" Type="Self.ListaEstudiante" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cursos">
+        <PropertyRef Name="IdCurso" />
+      </Principal>
+      <Dependent Role="ListaEstudiantes">
+        <PropertyRef Name="IdCurso" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_curso_listaReceta">
+    <End Role="Cursos" Type="Self.Curso" Multiplicity="1" />
+    <End Role="ListaRecetas" Type="Self.ListaReceta" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cursos">
+        <PropertyRef Name="IdCurso" />
+      </Principal>
+      <Dependent Role="ListaRecetas">
+        <PropertyRef Name="IdCurso" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_horario">
+    <End Role="Horarios" Type="Self.Horario" Multiplicity="1" />
+    <End Role="Cursos" Type="Self.Curso" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Horarios">
+        <PropertyRef Name="IdHorario" />
+      </Principal>
+      <Dependent Role="Cursos">
+        <PropertyRef Name="IdHorario" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_receta_img">
+    <End Role="Recetas" Type="Self.Receta" Multiplicity="1" />
+    <End Role="Imagenes_x_Recetas" Type="Self.Imagenes_x_Recetas" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Recetas">
+        <PropertyRef Name="IdReceta" />
+      </Principal>
+      <Dependent Role="Imagenes_x_Recetas">
+        <PropertyRef Name="IdReceta" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_receta_listaReceta">
+    <End Role="Recetas" Type="Self.Receta" Multiplicity="1" />
+    <End Role="ListaRecetas" Type="Self.ListaReceta" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Recetas">
+        <PropertyRef Name="IdReceta" />
+      </Principal>
+      <Dependent Role="ListaRecetas">
+        <PropertyRef Name="IdReceta" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_receta_tag">
+    <End Role="Recetas" Type="Self.Receta" Multiplicity="1" />
+    <End Role="ListaTags" Type="Self.ListaTag" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Recetas">
+        <PropertyRef Name="IdReceta" />
+      </Principal>
+      <Dependent Role="ListaTags">
+        <PropertyRef Name="IdReceta" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tag">
+    <End Role="Tags" Type="Self.Tag" Multiplicity="1" />
+    <End Role="ListaTags" Type="Self.ListaTag" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tags">
+        <PropertyRef Name="IdTag" />
+      </Principal>
+      <Dependent Role="ListaTags">
+        <PropertyRef Name="IdTag" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="PrograAvanzadaEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Categorias" EntityType="Self.Categoria" />
+    <EntitySet Name="Cursos" EntityType="Self.Curso" />
+    <EntitySet Name="Horarios" EntityType="Self.Horario" />
+    <EntitySet Name="Imagenes_x_Recetas" EntityType="Self.Imagenes_x_Recetas" />
+    <EntitySet Name="ListaEstudiantes" EntityType="Self.ListaEstudiante" />
+    <EntitySet Name="ListaRecetas" EntityType="Self.ListaReceta" />
+    <EntitySet Name="ListaTags" EntityType="Self.ListaTag" />
+    <EntitySet Name="Recetas" EntityType="Self.Receta" />
+    <EntitySet Name="Tags" EntityType="Self.Tag" />
+    <EntitySet Name="VistaCursosActivos" EntityType="Self.VistaCursosActivo" />
+    <EntitySet Name="VistaCursosEstudianteConIdUsuarios" EntityType="Self.VistaCursosEstudianteConIdUsuario" />
+    <AssociationSet Name="FK_categoria_receta" Association="Self.FK_categoria_receta">
+      <End Role="Categorias" EntitySet="Categorias" />
+      <End Role="Recetas" EntitySet="Recetas" />
+    </AssociationSet>
+    <AssociationSet Name="FK_curso_listaEstudiantes" Association="Self.FK_curso_listaEstudiantes">
+      <End Role="Cursos" EntitySet="Cursos" />
+      <End Role="ListaEstudiantes" EntitySet="ListaEstudiantes" />
+    </AssociationSet>
+    <AssociationSet Name="FK_curso_listaReceta" Association="Self.FK_curso_listaReceta">
+      <End Role="Cursos" EntitySet="Cursos" />
+      <End Role="ListaRecetas" EntitySet="ListaRecetas" />
+    </AssociationSet>
+    <AssociationSet Name="FK_horario" Association="Self.FK_horario">
+      <End Role="Horarios" EntitySet="Horarios" />
+      <End Role="Cursos" EntitySet="Cursos" />
+    </AssociationSet>
+    <AssociationSet Name="FK_receta_img" Association="Self.FK_receta_img">
+      <End Role="Recetas" EntitySet="Recetas" />
+      <End Role="Imagenes_x_Recetas" EntitySet="Imagenes_x_Recetas" />
+    </AssociationSet>
+    <AssociationSet Name="FK_receta_listaReceta" Association="Self.FK_receta_listaReceta">
+      <End Role="Recetas" EntitySet="Recetas" />
+      <End Role="ListaRecetas" EntitySet="ListaRecetas" />
+    </AssociationSet>
+    <AssociationSet Name="FK_receta_tag" Association="Self.FK_receta_tag">
+      <End Role="Recetas" EntitySet="Recetas" />
+      <End Role="ListaTags" EntitySet="ListaTags" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tag" Association="Self.FK_tag">
+      <End Role="Tags" EntitySet="Tags" />
+      <End Role="ListaTags" EntitySet="ListaTags" />
+    </AssociationSet>
+    <FunctionImport Name="CursosEstudiante" IsComposable="true" ReturnType="Collection(PrograAvanzadaModel.CursosEstudiante_Result)">
+      <Parameter Name="IdEstudiante" Mode="In" Type="String" />
+    </FunctionImport>
+  </EntityContainer>
+</Schema>
