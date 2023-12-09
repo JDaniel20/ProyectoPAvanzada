@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="PrograAvanzadaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="PrograAvanzadaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Categorias">
           <Key>
             <PropertyRef Name="IdCategoria" />
@@ -39,6 +39,7 @@
           <Property Name="IdImagen" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdReceta" Type="int" Nullable="false" />
           <Property Name="DatoImagen" Type="varbinary" MaxLength="2000" Nullable="false" />
+          <Property Name="NombreImagen" Type="varchar" MaxLength="25" Nullable="false" />
         </EntityType>
         <EntityType Name="ListaEstudiantes">
           <Key>
@@ -56,14 +57,6 @@
           <Property Name="IdReceta" Type="int" Nullable="false" />
           <Property Name="IdCurso" Type="int" Nullable="false" />
         </EntityType>
-        <EntityType Name="ListaTags">
-          <Key>
-            <PropertyRef Name="IdListaTag" />
-          </Key>
-          <Property Name="IdListaTag" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="IdTag" Type="int" Nullable="false" />
-          <Property Name="IdReceta" Type="int" Nullable="false" />
-        </EntityType>
         <EntityType Name="Recetas">
           <Key>
             <PropertyRef Name="IdReceta" />
@@ -80,6 +73,7 @@
           <Property Name="FechaCreacion" Type="date" />
           <Property Name="IdUsuarioModificacion" Type="nvarchar" MaxLength="128" />
           <Property Name="fechaModificacion" Type="date" />
+          <Property Name="IdTag" Type="int" />
         </EntityType>
         <EntityType Name="Tags">
           <Key>
@@ -201,26 +195,14 @@ warning 6002: The table/view 'PrograAvanzada.dbo.VistaCursosEstudianteConIdUsuar
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_receta_tag">
-          <End Role="Recetas" Type="Self.Recetas" Multiplicity="1" />
-          <End Role="ListaTags" Type="Self.ListaTags" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Recetas">
-              <PropertyRef Name="IdReceta" />
-            </Principal>
-            <Dependent Role="ListaTags">
-              <PropertyRef Name="IdReceta" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tag">
-          <End Role="Tags" Type="Self.Tags" Multiplicity="1" />
-          <End Role="ListaTags" Type="Self.ListaTags" Multiplicity="*" />
+        <Association Name="FK_RecetasTag">
+          <End Role="Tags" Type="Self.Tags" Multiplicity="0..1" />
+          <End Role="Recetas" Type="Self.Recetas" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Tags">
               <PropertyRef Name="IdTag" />
             </Principal>
-            <Dependent Role="ListaTags">
+            <Dependent Role="Recetas">
               <PropertyRef Name="IdTag" />
             </Dependent>
           </ReferentialConstraint>
@@ -248,7 +230,6 @@ warning 6002: The table/view 'PrograAvanzada.dbo.VistaCursosEstudianteConIdUsuar
           <EntitySet Name="Imagenes_x_Recetas" EntityType="Self.Imagenes_x_Recetas" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ListaEstudiantes" EntityType="Self.ListaEstudiantes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ListaRecetas" EntityType="Self.ListaRecetas" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ListaTags" EntityType="Self.ListaTags" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Recetas" EntityType="Self.Recetas" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tags" EntityType="Self.Tags" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VistaCursosActivos" EntityType="Self.VistaCursosActivos" store:Type="Views" store:Schema="dbo">
@@ -298,17 +279,12 @@ warning 6002: The table/view 'PrograAvanzada.dbo.VistaCursosEstudianteConIdUsuar
             <End Role="Recetas" EntitySet="Recetas" />
             <End Role="ListaRecetas" EntitySet="ListaRecetas" />
           </AssociationSet>
-          <AssociationSet Name="FK_receta_tag" Association="Self.FK_receta_tag">
-            <End Role="Recetas" EntitySet="Recetas" />
-            <End Role="ListaTags" EntitySet="ListaTags" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tag" Association="Self.FK_tag">
+          <AssociationSet Name="FK_RecetasTag" Association="Self.FK_RecetasTag">
             <End Role="Tags" EntitySet="Tags" />
-            <End Role="ListaTags" EntitySet="ListaTags" />
+            <End Role="Recetas" EntitySet="Recetas" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="PrograAvanzadaModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -361,6 +337,7 @@ warning 6002: The table/view 'PrograAvanzada.dbo.VistaCursosEstudianteConIdUsuar
           <Property Name="IdReceta" Type="Int32" Nullable="false" />
           <Property Name="DatoImagen" Type="Binary" MaxLength="2000" FixedLength="false" Nullable="false" />
           <NavigationProperty Name="Receta" Relationship="Self.FK_receta_img" FromRole="Imagenes_x_Recetas" ToRole="Recetas" />
+          <Property Name="NombreImagen" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="ListaEstudiante">
           <Key>
@@ -381,16 +358,6 @@ warning 6002: The table/view 'PrograAvanzada.dbo.VistaCursosEstudianteConIdUsuar
           <NavigationProperty Name="Curso" Relationship="Self.FK_curso_listaReceta" FromRole="ListaRecetas" ToRole="Cursos" />
           <NavigationProperty Name="Receta" Relationship="Self.FK_receta_listaReceta" FromRole="ListaRecetas" ToRole="Recetas" />
         </EntityType>
-        <EntityType Name="ListaTag">
-          <Key>
-            <PropertyRef Name="IdListaTag" />
-          </Key>
-          <Property Name="IdListaTag" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdTag" Type="Int32" Nullable="false" />
-          <Property Name="IdReceta" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Receta" Relationship="Self.FK_receta_tag" FromRole="ListaTags" ToRole="Recetas" />
-          <NavigationProperty Name="Tag" Relationship="Self.FK_tag" FromRole="ListaTags" ToRole="Tags" />
-        </EntityType>
         <EntityType Name="Receta">
           <Key>
             <PropertyRef Name="IdReceta" />
@@ -410,7 +377,8 @@ warning 6002: The table/view 'PrograAvanzada.dbo.VistaCursosEstudianteConIdUsuar
           <NavigationProperty Name="Categoria" Relationship="Self.FK_categoria_receta" FromRole="Recetas" ToRole="Categorias" />
           <NavigationProperty Name="Imagenes_x_Recetas" Relationship="Self.FK_receta_img" FromRole="Recetas" ToRole="Imagenes_x_Recetas" />
           <NavigationProperty Name="ListaRecetas" Relationship="Self.FK_receta_listaReceta" FromRole="Recetas" ToRole="ListaRecetas" />
-          <NavigationProperty Name="ListaTags" Relationship="Self.FK_receta_tag" FromRole="Recetas" ToRole="ListaTags" />
+          <Property Name="IdTag" Type="Int32" />
+          <NavigationProperty Name="Tag" Relationship="PrograAvanzadaModel.FK_RecetasTag" FromRole="Receta" ToRole="Tag" />
         </EntityType>
         <EntityType Name="Tag">
           <Key>
@@ -418,7 +386,7 @@ warning 6002: The table/view 'PrograAvanzada.dbo.VistaCursosEstudianteConIdUsuar
           </Key>
           <Property Name="IdTag" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="NombreTag" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="ListaTags" Relationship="Self.FK_tag" FromRole="Tags" ToRole="ListaTags" />
+          <NavigationProperty Name="Recetas" Relationship="PrograAvanzadaModel.FK_RecetasTag" FromRole="Tag" ToRole="Receta" />
         </EntityType>
         <EntityType Name="VistaCursosActivo">
           <Key>
@@ -529,30 +497,6 @@ warning 6002: The table/view 'PrograAvanzada.dbo.VistaCursosEstudianteConIdUsuar
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_receta_tag">
-          <End Role="Recetas" Type="Self.Receta" Multiplicity="1" />
-          <End Role="ListaTags" Type="Self.ListaTag" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Recetas">
-              <PropertyRef Name="IdReceta" />
-            </Principal>
-            <Dependent Role="ListaTags">
-              <PropertyRef Name="IdReceta" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_tag">
-          <End Role="Tags" Type="Self.Tag" Multiplicity="1" />
-          <End Role="ListaTags" Type="Self.ListaTag" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Tags">
-              <PropertyRef Name="IdTag" />
-            </Principal>
-            <Dependent Role="ListaTags">
-              <PropertyRef Name="IdTag" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="PrograAvanzadaEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Categorias" EntityType="Self.Categoria" />
           <EntitySet Name="Cursos" EntityType="Self.Curso" />
@@ -560,7 +504,6 @@ warning 6002: The table/view 'PrograAvanzada.dbo.VistaCursosEstudianteConIdUsuar
           <EntitySet Name="Imagenes_x_Recetas" EntityType="Self.Imagenes_x_Recetas" />
           <EntitySet Name="ListaEstudiantes" EntityType="Self.ListaEstudiante" />
           <EntitySet Name="ListaRecetas" EntityType="Self.ListaReceta" />
-          <EntitySet Name="ListaTags" EntityType="Self.ListaTag" />
           <EntitySet Name="Recetas" EntityType="Self.Receta" />
           <EntitySet Name="Tags" EntityType="Self.Tag" />
           <EntitySet Name="VistaCursosActivos" EntityType="Self.VistaCursosActivo" />
@@ -589,18 +532,26 @@ warning 6002: The table/view 'PrograAvanzada.dbo.VistaCursosEstudianteConIdUsuar
             <End Role="Recetas" EntitySet="Recetas" />
             <End Role="ListaRecetas" EntitySet="ListaRecetas" />
           </AssociationSet>
-          <AssociationSet Name="FK_receta_tag" Association="Self.FK_receta_tag">
-            <End Role="Recetas" EntitySet="Recetas" />
-            <End Role="ListaTags" EntitySet="ListaTags" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tag" Association="Self.FK_tag">
-            <End Role="Tags" EntitySet="Tags" />
-            <End Role="ListaTags" EntitySet="ListaTags" />
-          </AssociationSet>
           <FunctionImport Name="CursosEstudiante" IsComposable="true" ReturnType="Collection(PrograAvanzadaModel.CursosEstudiante_Result)">
-            <Parameter Name="IdEstudiante" Mode="In" Type="String" />
+          <Parameter Name="IdEstudiante" Mode="In" Type="String" />
           </FunctionImport>
+          <AssociationSet Name="FK_RecetasTag" Association="PrograAvanzadaModel.FK_RecetasTag">
+            <End Role="Tag" EntitySet="Tags" />
+            <End Role="Receta" EntitySet="Recetas" />
+          </AssociationSet>
         </EntityContainer>
+        <Association Name="FK_RecetasTag">
+          <End Type="PrograAvanzadaModel.Tag" Role="Tag" Multiplicity="0..1" />
+          <End Type="PrograAvanzadaModel.Receta" Role="Receta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tag">
+              <PropertyRef Name="IdTag" />
+            </Principal>
+            <Dependent Role="Receta">
+              <PropertyRef Name="IdTag" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -640,6 +591,7 @@ warning 6002: The table/view 'PrograAvanzada.dbo.VistaCursosEstudianteConIdUsuar
           <EntitySetMapping Name="Imagenes_x_Recetas">
             <EntityTypeMapping TypeName="PrograAvanzadaModel.Imagenes_x_Recetas">
               <MappingFragment StoreEntitySet="Imagenes_x_Recetas">
+                <ScalarProperty Name="NombreImagen" ColumnName="NombreImagen" />
                 <ScalarProperty Name="IdImagen" ColumnName="IdImagen" />
                 <ScalarProperty Name="IdReceta" ColumnName="IdReceta" />
                 <ScalarProperty Name="DatoImagen" ColumnName="DatoImagen" />
@@ -664,18 +616,10 @@ warning 6002: The table/view 'PrograAvanzada.dbo.VistaCursosEstudianteConIdUsuar
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ListaTags">
-            <EntityTypeMapping TypeName="PrograAvanzadaModel.ListaTag">
-              <MappingFragment StoreEntitySet="ListaTags">
-                <ScalarProperty Name="IdListaTag" ColumnName="IdListaTag" />
-                <ScalarProperty Name="IdTag" ColumnName="IdTag" />
-                <ScalarProperty Name="IdReceta" ColumnName="IdReceta" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Recetas">
             <EntityTypeMapping TypeName="PrograAvanzadaModel.Receta">
               <MappingFragment StoreEntitySet="Recetas">
+                <ScalarProperty Name="IdTag" ColumnName="IdTag" />
                 <ScalarProperty Name="IdReceta" ColumnName="IdReceta" />
                 <ScalarProperty Name="NombreReceta" ColumnName="NombreReceta" />
                 <ScalarProperty Name="IdCategoria" ColumnName="IdCategoria" />

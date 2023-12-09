@@ -17,6 +17,7 @@ namespace PrograAvanzadaP.Models
         public int IdImagen { get; set; }
         public int IdReceta { get; set; }
         public byte[] DatoImagen { get; set; }
+        public string NombreImagen { get; set; }
     
         public virtual Receta Receta { get; set; }
     }

@@ -17,13 +17,13 @@ namespace PrograAvanzadaP.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Tag()
         {
-            this.ListaTags = new HashSet<ListaTag>();
+            this.Recetas = new HashSet<Receta>();
         }
     
         public int IdTag { get; set; }
         public string NombreTag { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ListaTag> ListaTags { get; set; }
+        public virtual ICollection<Receta> Recetas { get; set; }
     }
 }

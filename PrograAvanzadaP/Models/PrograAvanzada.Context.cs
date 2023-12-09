@@ -33,7 +33,6 @@ namespace PrograAvanzadaP.Models
         public virtual DbSet<Imagenes_x_Recetas> Imagenes_x_Recetas { get; set; }
         public virtual DbSet<ListaEstudiante> ListaEstudiantes { get; set; }
         public virtual DbSet<ListaReceta> ListaRecetas { get; set; }
-        public virtual DbSet<ListaTag> ListaTags { get; set; }
         public virtual DbSet<Receta> Recetas { get; set; }
         public virtual DbSet<Tag> Tags { get; set; }
         public virtual DbSet<VistaCursosActivo> VistaCursosActivos { get; set; }

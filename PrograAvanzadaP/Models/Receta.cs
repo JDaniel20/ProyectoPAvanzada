@@ -19,7 +19,6 @@ namespace PrograAvanzadaP.Models
         {
             this.Imagenes_x_Recetas = new HashSet<Imagenes_x_Recetas>();
             this.ListaRecetas = new HashSet<ListaReceta>();
-            this.ListaTags = new HashSet<ListaTag>();
         }
     
         public int IdReceta { get; set; }
@@ -34,13 +33,13 @@ namespace PrograAvanzadaP.Models
         public Nullable<System.DateTime> FechaCreacion { get; set; }
         public string IdUsuarioModificacion { get; set; }
         public Nullable<System.DateTime> fechaModificacion { get; set; }
+        public Nullable<int> IdTag { get; set; }
     
         public virtual Categoria Categoria { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Imagenes_x_Recetas> Imagenes_x_Recetas { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ListaReceta> ListaRecetas { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ListaTag> ListaTags { get; set; }
+        public virtual Tag Tag { get; set; }
     }
 }
